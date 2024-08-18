@@ -83,9 +83,8 @@ with st.container():
 # Carrega os dados
 dados = carregar_dados()
 
-
 # Certifique-se de que a coluna 'data' está no formato datetime
-dados['data'] = pd.to_datetime(dados['data'], errors='coerce')
+dados['data'] = pd.to_datetime(dados['data'], format='%d/%m/%Y', errors='coerce')
 
 # Cria uma nova variável "total"
 dados['total'] = dados['qtde_h'] * dados['vlr_h']
