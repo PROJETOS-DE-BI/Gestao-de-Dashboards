@@ -14,7 +14,7 @@ def image_to_base64(image):
     return img_str
 
 # Carrega a imagem
-imagem = Image.open(r"C:\Users\gusta\Desktop\JGR\foto_streamlit2.png")  # Substitua pelo caminho da sua imagem
+imagem = Image.open(r"C:\Users\gusta\Desktop\JGR\foto_streamlit3.png")  # Substitua pelo caminho da sua imagem
 
 # Custom CSS para a faixa com gradiente e imagem sobreposta
 st.markdown(
@@ -26,15 +26,14 @@ st.markdown(
         height: 200px;  /* Ajuste a altura conforme necessário */
         background: linear-gradient(90deg, blue, white);
         display: flex;
-        justify-content: center;
         align-items: center;
-        overflow: hidden;
         padding: 20px;
         box-sizing: border-box;
     }
     .text-container {
         text-align: center;
         color: black;
+        flex: 1;
         z-index: 1;  /* Garante que o texto fique acima da imagem */
     }
     .text-container h1 {
@@ -47,8 +46,8 @@ st.markdown(
     }
     .full-width-banner img {
         position: absolute;
-        right: 20px;  /* Posição horizontal da imagem */
-        bottom: 20px;  /* Posição vertical da imagem */
+        top: 20px;  /* Posição vertical da imagem */
+        left: 20px;  /* Ajuste a posição horizontal da imagem para alinhar com o padding */
         height: 150px;  /* Ajuste a altura da imagem conforme necessário */
         z-index: 0;  /* Garante que a imagem fique atrás do texto */
     }
@@ -61,11 +60,11 @@ st.markdown(
 st.markdown(
     """
     <div class="full-width-banner">
+        <img src="data:image/png;base64,{}" alt="logo">
         <div class="text-container">
             <h1>Dashboard de Contratos</h1>
             <p>Informações sobre os contratos fechados pela JGR em 2024</p>
         </div>
-        <img src="data:image/png;base64,{}" alt="logo">
     </div>
     """.format(image_to_base64(imagem)),
     unsafe_allow_html=True
