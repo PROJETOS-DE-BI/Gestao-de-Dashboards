@@ -45,8 +45,18 @@ dados_mensal_linhas = dados.groupby('mes')['total'].sum().reset_index()
 media_valor = round(dados_mensal_barras['qtde_h'].mean(), 0)
 media_total = f"R$ {round(dados_mensal_linhas['total'].mean(), 2):,.2f}"
 
+# Calcular o recebimento médio por mês
+dados_mensal_recebimento_medio = dados.groupby('mes').agg(
+    soma_total=('total', 'sum'),
+    soma_qtde=('qtde_h', 'sum')
+).reset_index()
 
+# Calcula o recebimento médio corretamente
+dados_mensal_recebimento_medio['recebimento_medio'] = dados_mensal_recebimento_medio['soma_total'] / dados_mensal_recebimento_medio['soma_qtde']
 
+# Verifique se o cálculo está correto
+st.write("Dados do Recebimento Médio por Mês:")
+st.write(dados_mensal_recebimento_medio)
 
 # Criação do gráfico de barras com Plotly
 fig_barras = px.bar(dados_mensal_barras, x='mes', y='qtde_h', title='Quantidade de Contratos',
@@ -91,9 +101,25 @@ fig_linhas.update_layout(
     autosize=True
 )
 
+
+# Criação do gráfico de recebimento médio com Plotly
+fig_recebimento_medio = px.line(dados_mensal_recebimento_medio, x='mes', y='recebimento_medio', 
+                                title='Recebimento Médio por Mês',
+                                labels={'mes': 'Mês', 'recebimento_medio': 'Recebimento Médio (R$)'})
+
+# Atualiza o layout do gráfico de recebimento médio
+fig_recebimento_medio.update_layout(
+    yaxis_tickprefix='R$ ',
+    yaxis_tickformat=',.2f',
+    autosize=True
+)
+
 # Exibe os gráficos lado a lado com proporções definidas
-col1, col2 = st.columns([2, 2])  # Ajusta as proporções das colunas
+col1, col2 = st.columns([2, 2])
 with col1:
     st.plotly_chart(fig_barras, use_container_width=True)
 with col2:
     st.plotly_chart(fig_linhas, use_container_width=True)
+
+# Exibe o gráfico de recebimento médio abaixo dos outros gráficos
+st.plotly_chart(fig_recebimento_medio, use_container_width=True)
